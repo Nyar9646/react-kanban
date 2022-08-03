@@ -4,12 +4,19 @@
 
 <details>
 <summary>環境</summary>
-- persel : モジュールバンドラ + ローカルサーバ
+- parsel : モジュールバンドラ + ローカルサーバ
+- typescript, (tsc : 型のチェックを コマンドscript で行う)
+- react, react-dom
+- styled-components
 </details>
 
 <details>
 <summary>Todo</summary>
-- gitHub へcommit
+- index.tsx : 共通css
 - gitHub pages へデプロイ
--
+</details>
+
+<details>
+<summary>Remind</summary>
+- tsc コマンドでエラーが出たら、tsconfig のコメントを外してみる
 </details>

@@ -1,0 +1,28 @@
+{
+  "compilerOptions": {
+    // 環境は最新のブラウザーと解釈せよ
+    "target": "ES2019",
+    "lib": ["ES2019", "DOM", "DOM.Iterable"],
+
+    "module": "ESNext",
+
+    "moduleResolution": "Node",
+
+    // ts で react を使えるようにする
+    "allowSyntheticDefaultImports": true,
+    "jsx": "react",
+
+    // 型検査の結果は .ts-cache にキャッシュせよ
+    "incremental": true,
+    "outDir": "./.ts-cache/",
+
+    // styled-components 導入によるエラー回避
+    // "skipLibCheck": true,
+
+    // 型検査は緩めだが null と undefined だけは厳しく検査せよ
+    "strictNullChecks": true,
+  },
+
+  // 対象は src 配下にある
+  "include": ["./src/**/*"],
+}
