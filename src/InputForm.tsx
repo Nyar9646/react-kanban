@@ -1,7 +1,8 @@
-import React from "react";
+import React, { useEffect, useRef } from "react";
 import styled from "styled-components";
 import * as color from './color'
 import { Button, ConfirmButton } from "./Button";
+import { useAutoFitToContentHeight } from "./hooks/useAuto";
 
 const Container = styled.div``
 const Input = styled.textarea`
@@ -52,21 +53,25 @@ export function InputForm({
 
   const handleConfirm = () => {
     if (disabled) return
+
     // ＊null許可関数の呼び出し方 : func?.()
     onConfirm?.()
   }
 
+  const ref = useAutoFitToContentHeight(value)
+
   return (
     <Container className={className}>
       <Input
+        ref={ref}
         autoFocus
         placeholder="Enter a note"
         value={value}
         onChange={e => onChange?.(e.currentTarget.value)}
         onKeyDown={e => {
           // metaKey = commandボタン, windowsボタン
-          // ???
           if (!((e.metaKey || e.ctrlKey) && e.key === 'Enter')) return
+
           handleConfirm()
         }}
       />

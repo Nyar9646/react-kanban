@@ -77,9 +77,7 @@ export function Column({
   const [text, setText] = useState('')
   const [inputMode, setInputMode] = useState(false)
 
-  // ＊v => !v : 現在の値の逆を返して state 更新
   const toggleInput = () => setInputMode(v => !v)
-
   const confirmInput = () => setText('')
   const canselInput = () => setInputMode(false)
 
@@ -92,9 +90,9 @@ export function Column({
       </Header>
 
       {inputMode && (
+        // ＊text を引数として渡すことで、inputMode でフォームを非表示にしても値が残る
         <InputForm
           value={text}
-          // ＊ onChange={setText} === onChange={(e) => setText(e.target.value)}
           onChange={setText}
           onConfirm={confirmInput}
           onCancel={canselInput}
