@@ -56,7 +56,7 @@ export function Card({text}: {text?: string}) {
     <Container>
       <CheckIcon />
 
-      {/* ??? */}
+      {/* 'https://' があれば text の文字列を区切り、Link とする。切り分けると i が 2 になる */}
       {text?.split(/(https:\/\/\S+)/g).map((fragment, i) =>
         i % 2 === 0 ? (
           <Text key={i}>{fragment}</Text>

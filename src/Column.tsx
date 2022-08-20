@@ -1,8 +1,9 @@
-import React from "react"
+import React, { useState } from "react"
 import styled from "styled-components"
 import * as color from './color'
 import { Card } from "./Card"
 import { PlusIcon } from "./icon"
+import { InputForm as _InputForm } from "./InputForm"
 
 const Container = styled.div`
   display: flex;
@@ -48,6 +49,9 @@ const AddButton = styled.button.attrs({
     color: ${color.Blue};
   }
 `
+const InputForm = styled(_InputForm)`
+  padding: 8px;
+`
 const VerticalScroll = styled.div`
   height: 100%;
   padding: 8px;
@@ -70,14 +74,32 @@ export function Column({
   }[]
 }) {
   const totalCount = cards.length
+  const [text, setText] = useState('')
+  const [inputMode, setInputMode] = useState(false)
+
+  // ＊v => !v : 現在の値の逆を返して state 更新
+  const toggleInput = () => setInputMode(v => !v)
+
+  const confirmInput = () => setText('')
+  const canselInput = () => setInputMode(false)
 
   return (
     <Container>
       <Header>
         <CountBadge>{totalCount}</CountBadge>
         <ColumnName>{title}</ColumnName>
-        <AddButton />
+        <AddButton onClick={toggleInput} />
       </Header>
+
+      {inputMode && (
+        <InputForm
+          value={text}
+          // ＊ onChange={setText} === onChange={(e) => setText(e.target.value)}
+          onChange={setText}
+          onConfirm={confirmInput}
+          onCancel={canselInput}
+        />
+      )}
 
       <VerticalScroll>
         {cards.map(({id, text}) => (
