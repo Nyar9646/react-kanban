@@ -1,8 +1,8 @@
-import React, { useEffect, useRef } from "react";
+import React from "react";
 import styled from "styled-components";
-import * as color from './color'
+import * as color from '../../utils/color'
 import { Button, ConfirmButton } from "./Button";
-import { useAutoFitToContentHeight } from "./hooks/useAuto";
+import { useAutoFitToContentHeight } from "../../hooks/useInput";
 
 const Container = styled.div``
 const Input = styled.textarea`

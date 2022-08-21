@@ -1,0 +1,1 @@
+export const DRAG_TIMEOUT: number = 100

@@ -1,6 +1,6 @@
 import React from "react"
 import { createRoot } from "react-dom/client"
-import { GlobalStyle } from "./GlobalStyle"
+import { GlobalStyle } from "./style/GlobalStyle"
 import { App } from "./App"
 
 // JSX は JS に変換される。html は js のみ扱えるため

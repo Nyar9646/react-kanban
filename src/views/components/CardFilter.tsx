@@ -1,7 +1,7 @@
 import React from "react"
 import styled from "styled-components"
-import * as color from './color'
-import { SearchIcon as _SearchIcon } from "./icon"
+import * as color from '../../utils/color'
+import { SearchIcon as _SearchIcon } from "../../style/icon"
 
 const Container = styled.label`
   display: flex;

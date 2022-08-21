@@ -1,7 +1,7 @@
 import React from "react"
 import styled from "styled-components"
-import * as color from './color'
-import { CheckIcon as _CheckIcon, TrashIcon } from "./icon"
+import * as color from '../../utils/color'
+import { CheckIcon as _CheckIcon, TrashIcon } from "../../style/icon"
 
 const Container = styled.div.attrs({
   draggable: true

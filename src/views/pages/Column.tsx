@@ -1,9 +1,9 @@
 import React, { useState } from "react"
 import styled from "styled-components"
-import * as color from './color'
+import * as color from '../../utils/color'
 import { Card } from "./Card"
-import { PlusIcon } from "./icon"
-import { InputForm as _InputForm } from "./InputForm"
+import { PlusIcon } from "../../style/icon"
+import { InputForm as _InputForm } from "../components/InputForm"
 
 const Container = styled.div`
   display: flex;

@@ -1,7 +1,7 @@
 import React, { useState } from "react"
 import styled from "styled-components"
-import { Header as _Header } from "./Header"
-import { Column } from "./Column"
+import { Header as _Header } from "./views/pages/Header"
+import { Column } from "./views/pages/Column"
 
 const Container = styled.div`
   display: flex;

@@ -1,7 +1,7 @@
 import React from "react"
 import styled from "styled-components"
-import * as color from './color'
-import { CardFilter } from "./CardFilter"
+import * as color from '../../utils/color'
+import { CardFilter } from "../components/CardFilter"
 
 const Container = styled.div`
   display: flex;
