@@ -26,11 +26,21 @@ const Input = styled.input.attrs({type: 'search'})`
   }
 `
 
-export function CardFilter() {
+export function CardFilter({
+  value,
+  onChange,
+}: {
+  value?: string,
+  onChange?(value: string): void,
+}) {
   return (
     <Container>
       <SearchIcon />
-      <Input placeholder="Filter Cards" />
+      <Input
+        placeholder="Filter Cards"
+        value={value}
+        onChange={e => onChange?.(e.currentTarget.value)}
+      />
     </Container>
   )
 }

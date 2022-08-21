@@ -52,6 +52,11 @@ const AddButton = styled.button.attrs({
 const InputForm = styled(_InputForm)`
   padding: 8px;
 `
+const ResultCount = styled.div`
+  color: ${color.Black};
+  font-size: 12px;
+  text-align: center;
+`
 const VerticalScroll = styled.div`
   height: 100%;
   padding: 8px;
@@ -65,15 +70,27 @@ const VerticalScroll = styled.div`
 
 export function Column({
   title,
-  cards,
+  // ＊引数に別名をつける。関数コンポーネント内で元の名前を使うため
+  filterValue: rawFilterValue,
+  cards: rawCards,
 }: {
   title?: string,
+  filterValue?: string,
   cards: {
     id: string,
     text?: string,
   }[]
 }) {
-  const totalCount = cards.length
+  // 文字列の前後の空白を除く
+  const filterValue = rawFilterValue?.trim()
+  // 英字は全角半角共に小文字に変換し、空白文字(繰り返し含む)で区切る。検索の入力がなければ空
+  const keywords = filterValue?.toLowerCase().split(/\s+/g) ?? []
+
+  // every : 配列の全要素に対して、テスト内容に沿うか
+  // cards 配列の text の内、検索条件を含む cards を取得
+  const cards = rawCards.filter(({text}) => keywords?.every(w => text?.toLowerCase().includes(w)))
+
+  const totalCount = rawCards.length
   const [text, setText] = useState('')
   const [inputMode, setInputMode] = useState(false)
 
@@ -98,6 +115,8 @@ export function Column({
           onCancel={canselInput}
         />
       )}
+
+      {filterValue && <ResultCount>{cards.length} results.</ResultCount>}
 
       <VerticalScroll>
         {cards.map(({id, text}) => (
