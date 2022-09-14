@@ -1,7 +1,10 @@
 import React, { useState } from "react"
 import styled from "styled-components"
+import produce from "immer"
 import { Header as _Header } from "./views/pages/Header"
 import { Column } from "./views/pages/Column"
+import { DeleteDialog } from "./views/components/DeleteDialog"
+import { Overlay as _Overlay } from "./views/components/Overlay"
 
 const Container = styled.div`
   display: flex;
@@ -33,9 +36,15 @@ const HorizontalScroll = styled.div`
     content: '';
   }
 `
+const Overlay = styled(_Overlay)`
+  display: flex;
+  justify-content: center;
+  align-items: center;
+`
 
 export function App() {
   const [filterValue, setFilterValue] = useState('')
+  const [deletingCardId, setDeletingCardId] = useState<string | undefined>(undefined)
 
   // cards.id は全 column 合わせて一意
   const [columns, setColumns] = useState([
@@ -75,6 +84,24 @@ export function App() {
     undefined,
   )
 
+  const deleteCard = () => {
+    const cardId = deletingCardId
+    if (!cardId) return
+
+    setDeletingCardId(undefined)
+
+    type Columns = typeof columns
+
+    setColumns(
+      produce((columns: Columns) => {
+        const column = columns.find(col => col.cards.some(c => c.id === cardId))
+        if (!column) return
+
+        column.cards = column.cards.filter(c => c.id !== cardId)
+      })
+    )
+  }
+
   const dropCardTo = (toId: string) => {
     const fromId = draggingCardId
     if (!fromId) return
@@ -83,53 +110,33 @@ export function App() {
 
     if (fromId === toId) return
 
-    // ＊ イミュータブルな値の操作
-    setColumns(columns => {
-      // ＊ flatMap
-      //  columns.map >> [[card, card], [card]] ... [[TODO], [Doing]]
-      //  columns.flatMap >> 配列を一段浅くした配列を返す。[card, card, card]
+    type Columns = typeof columns
 
-      // 移動した card を、1階層の配列として取得
-      const card = columns.flatMap(col => col.cards).find(c => c.id === fromId)
+    setColumns(
+      produce((columns: Columns) => {
+        const card = columns
+          .flatMap(col => col.cards)
+          .find(c => c.id === fromId)
 
-      if (!card) {
-        return columns
-      }
+        if (!card) return
 
-      return columns.map(column => {
-        let newColumn = column
+        const fromColumn = columns.find(col => col.cards.some(c => c.id === fromId))
+        if (!fromColumn) return
 
-        // ＊ some : 配列で1つ以上の要素が () 内の検査に当てはまるか
+        fromColumn.cards = fromColumn.cards.filter(c => c.id !== fromId)
 
-        // この column で、移動した card がある場合、移動した card 以外を取得
-        if (newColumn.cards.some(c => c.id === fromId)) {
-          // ＊ ネスト配列の、削除の仕方
-          newColumn = {
-            ...newColumn,
-            cards: newColumn.cards.filter(c => c.id !== fromId),
-          }
+        const toColumn = columns.find(col => col.id === toId || col.cards.some(c => c.id === toId))
+        if (!toColumn) return
+
+        let index = toColumn.cards.findIndex(c => c.id === toId)
+
+        if (index < 0) {
+          index = toColumn.cards.length
         }
 
-        // 列の末尾に移動
-        // ???
-        if (newColumn.id === toId) {
-          // ＊ ネスト階層の配列の、追加の仕方
-          newColumn = {
-            ...newColumn,
-            cards: [...newColumn.cards, card],
-          }
-        }
-        // 列の末尾以外に移動
-        else if (newColumn.cards.some(c => c.id === toId)) {
-          newColumn = {
-            ...newColumn,
-            cards : newColumn.cards.flatMap(c => c.id === toId ? [card, c] : [c]),
-          }
-        }
-
-        return newColumn
+        toColumn.cards.splice(index, 0, card)
       })
-    })
+    )
   }
 
   return (
@@ -144,14 +151,22 @@ export function App() {
               title={title}
               filterValue={filterValue}
               cards={cards}
-              onCardDragStart={cardId => setDraggingCardId(cardId)}
-
-              // ???
+              onCardDragStart={setDraggingCardId}
               onCardDrop={entered => dropCardTo(entered ?? columnId)}
+              onCardDeleteClick={setDeletingCardId}
             />
           ))}
         </HorizontalScroll>
       </MainArea>
+
+      {deletingCardId && (
+        <Overlay onClick={() => setDeletingCardId(undefined)} >
+          <DeleteDialog
+            onConfirm={deleteCard}
+            onCancel={() => setDeletingCardId(undefined)}
+          />
+        </Overlay>
+      )}
     </Container>
   )
 }

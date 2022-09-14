@@ -3,11 +3,12 @@
 ## 機能
 
 <details>
-<summary>環境</summary>
+<summary>install</summary>
 - parsel : モジュールバンドラ + ローカルサーバ
 - typescript, (tsc : 型のチェックを コマンドscript で行う)
 - react, react-dom
 - styled-components
+- immer : イミュータブルでないコーディングでもイミュータブルに変換
 </details>
 
 <details>

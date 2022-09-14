@@ -75,6 +75,7 @@ export function Column({
   cards: rawCards,
   onCardDragStart,
   onCardDrop,
+  onCardDeleteClick,
 }: {
   title?: string,
   filterValue?: string,
@@ -84,6 +85,7 @@ export function Column({
   }[],
   onCardDragStart?(id: string): void,
   onCardDrop?(entered: string | null): void,
+  onCardDeleteClick?(id: string): void
 }) {
   // 文字列の前後の空白を除く
   const filterValue = rawFilterValue?.trim()
@@ -144,6 +146,7 @@ export function Column({
               text={text}
               onDragStart={() => handleCardDragStart(id)}
               onDragEnd={() => setDraggingCardId(undefined)}
+              onDeleteClick={() => onCardDeleteClick?.(id)}
             />
           </Card.DropArea>
         ))}

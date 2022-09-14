@@ -58,10 +58,12 @@ export function Card({
   text,
   onDragStart,
   onDragEnd,
+  onDeleteClick,
 }: {
   text?: string,
   onDragStart?(): void,
   onDragEnd?(): void,
+  onDeleteClick?(): void,
 }) {
   const [drag, setDrag] = useState(false)
 
@@ -87,16 +89,16 @@ export function Card({
         ) : (
           <Link key={i} href={fragment}>{fragment}</Link>
         )
-      )}
 
-      <DeleteButton />
+      )}
+      <DeleteButton onClick={onDeleteClick} />
     </Container>
   )
 }
 
 /**
  * DropAreaContainer
- *  Card のドラッグ可能なエリア。解説なし...
+ *  Card のドラッグ可能なエリア
  */
 const DropAreaContainer = styled.div`
   > :not(:first-child) {
