@@ -1,6 +1,7 @@
 import React, { useState } from "react"
 import styled from "styled-components"
 import produce from "immer"
+import { randomId } from './utils/util';
 import { Header as _Header } from "./views/pages/Header"
 import { Column } from "./views/pages/Column"
 import { DeleteDialog } from "./views/components/DeleteDialog"
@@ -29,7 +30,6 @@ const HorizontalScroll = styled.div`
     margin-left: 16px;
     flex-shrink: 0;
   }
-
   ::after {
     display: block;
     flex: 0 0 16px;
@@ -51,6 +51,7 @@ export function App() {
     {
       id: 'A',
       title: 'TODO',
+      text: '',
       cards: [
         {id: '1', text: '朝食をとる🍞'},
         {id: '2', text: 'SNSをチェックする🐦'},
@@ -60,6 +61,7 @@ export function App() {
     {
       id: 'B',
       title: 'Doing',
+      text: '',
       cards: [
         {id: '4', text: '顔を洗う👐！'},
         {id: '5', text: '歯を磨く🦷！'},
@@ -68,11 +70,13 @@ export function App() {
     {
       id: 'C',
       title: 'Waiting',
+      text: '',
       cards: []
     },
     {
       id: 'D',
       title: 'Done',
+      text: '',
       cards: [
         {id: '6', text: '布団から出る (:3っ)っ -=三[＿＿]'},
       ]
@@ -80,9 +84,40 @@ export function App() {
   ])
 
   // ＊ string型 の useState は初期値として unefined 推奨
-  const [draggingCardId, setDraggingCardId] = useState<string | undefined>(
-    undefined,
-  )
+  const [draggingCardId, setDraggingCardId] = useState<string | undefined>(undefined)
+
+  const setText = (colmunId: string, value: string) => {
+    type Columns = typeof columns;
+    setColumns(
+      // produce : immer で提供されている。イミュータブルを実現。ディープコピーして処理
+      //  イミュータブル : レンダリングせずに値を操作
+      produce((columns: Columns) => {
+        const column = columns.find(c => c.id === colmunId)
+        if (!column) return
+
+        column.text = value
+      })
+    )
+  }
+
+  const addCard = (columnId: string) => {
+    const cardId = randomId()
+    type Columns = typeof columns;
+
+    setColumns(
+      produce((columns: Columns) => {
+        const column = columns.find(c => c.id === columnId)
+        if (!column) return
+
+        // unshift : 配列の最初に1つ以上の要素を追加
+        column.cards.unshift({
+          id: cardId,
+          text: column.text,
+        })
+        column.text = ''
+      })
+    )
+  }
 
   const deleteCard = () => {
     const cardId = deletingCardId
@@ -145,7 +180,7 @@ export function App() {
 
       <MainArea>
         <HorizontalScroll>
-          {columns.map(({ id: columnId, title, cards }) => (
+          {columns.map(({ id: columnId, title, cards, text }) => (
             <Column
               key={columnId}
               title={title}
@@ -154,6 +189,9 @@ export function App() {
               onCardDragStart={setDraggingCardId}
               onCardDrop={entered => dropCardTo(entered ?? columnId)}
               onCardDeleteClick={setDeletingCardId}
+              text={text}
+              onTextChange={value => setText(columnId, value)}
+              onTextConfirm={() => addCard(columnId)}
             />
           ))}
         </HorizontalScroll>

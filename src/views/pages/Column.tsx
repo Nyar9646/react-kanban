@@ -76,6 +76,10 @@ export function Column({
   onCardDragStart,
   onCardDrop,
   onCardDeleteClick,
+  text,
+  onTextChange,
+  onTextConfirm,
+  onTextCancel,
 }: {
   title?: string,
   filterValue?: string,
@@ -86,6 +90,10 @@ export function Column({
   onCardDragStart?(id: string): void,
   onCardDrop?(entered: string | null): void,
   onCardDeleteClick?(id: string): void
+  text?: string,
+  onTextChange?(value: string): void,
+  onTextConfirm?(): void,
+  onTextCancel?(): void,
 }) {
   // 文字列の前後の空白を除く
   const filterValue = rawFilterValue?.trim()
@@ -97,15 +105,19 @@ export function Column({
   const cards = rawCards.filter(({text}) => keywords?.every(w => text?.toLowerCase().includes(w)))
 
   const totalCount = rawCards.length
-  const [text, setText] = useState('')
   const [inputMode, setInputMode] = useState(false)
 
   // ドラッグ前の場所から変わらない位置に、点々枠を非表示にする処置
   const [draggingCardId, setDraggingCardId] = useState<String | undefined>(undefined)
 
   const toggleInput = () => setInputMode(v => !v)
-  const confirmInput = () => setText('')
-  const canselInput = () => setInputMode(false)
+
+  const confirmInput = () => onTextConfirm?.()
+
+  const cancelInput = () => {
+    setInputMode(false)
+    onTextCancel?.()
+  }
 
   const handleCardDragStart = (id: string) => {
     setDraggingCardId(id)
@@ -124,9 +136,9 @@ export function Column({
         // ＊text を引数として渡すことで、inputMode でフォームを非表示にしても値が残る
         <InputForm
           value={text}
-          onChange={setText}
+          onChange={onTextChange}
           onConfirm={confirmInput}
-          onCancel={canselInput}
+          onCancel={cancelInput}
         />
       )}
 

@@ -1,4 +1,6 @@
 # Kanban
+URL : http://localhost:1234
+npm start
 
 ## 機能
 
@@ -9,6 +11,7 @@
 - react, react-dom
 - styled-components
 - immer : イミュータブルでないコーディングでもイミュータブルに変換
+- json-server : サーバとストア
 </details>
 
 <details>

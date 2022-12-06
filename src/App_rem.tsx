@@ -88,7 +88,6 @@ export function App() {
       // ＊ flatMap
       //  columns.map >> [[card, card], [card]] ... [[TODO], [Doing]]
       //  columns.flatMap >> 配列を一段浅くした配列を返す。[card, card, card]
-
       // 移動した card を、1階層の配列として取得
       const card = columns.flatMap(col => col.cards).find(c => c.id === fromId)
 
