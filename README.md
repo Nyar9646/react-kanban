@@ -1,6 +1,10 @@
 # Kanban
+
 URL : http://localhost:1234
-npm start
+
+start-up
+npm start : main server
+npm run start-api : api server
 
 ## 機能
 
@@ -12,6 +16,7 @@ npm start
 - styled-components
 - immer : イミュータブルでないコーディングでもイミュータブルに変換
 - json-server : サーバとストア
+- api : db.json へ
 </details>
 
 <details>
